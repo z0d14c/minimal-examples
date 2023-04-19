@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import Tabs from './components/tabs';
-import PerformanceObserverEx from './pages/PerformanceObserver/PerformanceObserveEx';
+import PerformanceObserverEx from './pages/PerformanceObserver/PerformanceObserverEx';
 import WebWorker from "./pages/WebWorker/webworker";
 
 // Example usage
