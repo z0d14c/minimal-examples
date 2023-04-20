@@ -2,7 +2,8 @@ import { useEffect, useState } from "react"
 
 export const WebWorkerDemo = () => {
     const [number, setNumber] = useState(0);
-    useEffect(() => {
+    const runWorker = () => {
+        console.log("before worker")
         // Create a new Worker
         const myWorker = new Worker('src/worker.js');
 
@@ -10,26 +11,34 @@ export const WebWorkerDemo = () => {
         myWorker.postMessage('Hello from the main script!');
 
         // Listen for messages from the worker
-        myWorker.onmessage = function(event) {
+        myWorker.onmessage = function (event) {
             console.log('Received message from worker: ', event.data);
             setNumber(event.data);
+            myWorker.terminate();
         };
-    }, []);
+    }
 
-    useEffect(() => {
-        // let i=0;
-        // for (; i<10000000000; i++) {
-    
-        // }
+    const runMainThread = () => {
+        console.log("before main thread")
+        const perfA = performance.now();
+        let i = 0;
+        for (; i < 10000000000; i++) {
 
-        // setNumber(i);
-    }, []);
+        }
 
-    return <div>Web Worker! 
+        console.log("perfomance: ", performance.now() - perfA);
+    }
+
+    return <div>Web Worker!
         Data received: {number}
         <input type="text">
-        
-        </input></div>
+
+        </input>
+        <div>
+            <button onClick={runWorker}>Run Worker</button></div>
+            <div>
+                <button onClick={runMainThread}>Run main thread</button>
+                </div></div>
 }
 
 export default WebWorkerDemo;

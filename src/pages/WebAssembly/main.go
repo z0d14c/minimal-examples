@@ -32,8 +32,20 @@ func multiply(this js.Value, inputs []js.Value) interface{} {
 	return inputs[0].Float() * inputs[1].Float()
 }
 
+func golangLoop(this js.Value, inputs []js.Value) interface{} {
+	i := 0
+	maxNum := inputs[0].Int()
+
+	for ; i < maxNum; i++ {
+		// consoleLog("looping")
+	}
+
+	return i
+}
+
 func main() {
 	c := make(chan struct{}, 0)
 	js.Global().Set("multiply", js.FuncOf(multiply))
+	js.Global().Set("golangLoop", js.FuncOf(golangLoop))
 	<-c
 }

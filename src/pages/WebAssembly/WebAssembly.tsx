@@ -4,7 +4,8 @@ function WebAssembly() {
   const [wasmReady, setWasmReady] = useState(false);
   const [number1, setNumber1] = useState(0);
   const [number2, setNumber2] = useState(0);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(0);
+  const [loopNum, setLoopNum] = useState(0);
 
   useEffect(() => {
     async function initWasm() {
@@ -23,6 +24,26 @@ function WebAssembly() {
     if (wasmReady) {
       const product = (window as any).multiply(number1, number2);
       setResult(product);
+    }
+  };
+
+  const loop = () => {
+    setLoopNum(0);
+    if (wasmReady) {
+      const firstPerf = performance.now();
+      const loopOutput = (window as any).golangLoop(10000000000);
+      setLoopNum(loopOutput);
+      console.log("golangLoop perf", performance.now() - firstPerf);
+    }
+  };
+
+  const runCppLoop = () => {
+    setLoopNum(0);
+    if (wasmReady) {
+      const firstPerf = performance.now();
+      const loopOutput = (window as any).Module.cppLoop(10000000000);
+      setLoopNum(loopOutput);
+      console.log("cppLoop perf", performance.now() - firstPerf);
     }
   };
 
@@ -47,6 +68,12 @@ function WebAssembly() {
           The product of {number1} and {number2} is {result}.
         </p>
       )}
+      <div>
+        <button onClick={loop}>Loop</button><button onClick={runCppLoop}>CPP Loop</button>
+        <p>
+          The loop went through {loopNum} times.
+        </p>
+      </div>
     </div>
   );
 }
